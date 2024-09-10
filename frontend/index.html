@@ -173,24 +173,35 @@
 
     <script src="https://unpkg.com/@dfinity/agent/lib/index.js"></script>
     <script>
+        let backend;
         const canisterId = 'rrkah-fqaaa-aaaaa-aaaaq-cai'; // Replace with your actual canister ID
-        const agent = new window.ic.HttpAgent();
-        const backend = window.ic.createActor(canisterId, {
-            agent,
-            interfaceFactory: ({ IDL }) => {
-                const Post = IDL.Record({
-                    'id': IDL.Nat,
-                    'title': IDL.Text,
-                    'content': IDL.Text,
-                    'date': IDL.Text,
-                    'timestamp': IDL.Int
+
+        async function initializeBackend() {
+            try {
+                const agent = new window.ic.HttpAgent();
+                backend = window.ic.createActor(canisterId, {
+                    agent,
+                    interfaceFactory: ({ IDL }) => {
+                        const Post = IDL.Record({
+                            'id': IDL.Nat,
+                            'title': IDL.Text,
+                            'content': IDL.Text,
+                            'date': IDL.Text,
+                            'timestamp': IDL.Int
+                        });
+                        return IDL.Service({
+                            'createPost': IDL.Func([IDL.Text, IDL.Text, IDL.Text], [IDL.Variant({ 'ok': Post, 'err': IDL.Text })], []),
+                            'getPosts': IDL.Func([], [IDL.Vec(Post)], ['query'])
+                        });
+                    }
                 });
-                return IDL.Service({
-                    'createPost': IDL.Func([IDL.Text, IDL.Text, IDL.Text], [IDL.Variant({ 'ok': Post, 'err': IDL.Text })], []),
-                    'getPosts': IDL.Func([], [IDL.Vec(Post)], ['query'])
-                });
+                console.log('Backend initialized successfully');
+                showHome();
+            } catch (error) {
+                console.error('Error initializing backend:', error);
+                document.getElementById('main-content').innerHTML = '<p>Error initializing the application. Please try again later.</p>';
             }
-        });
+        }
 
         async function showHome() {
             const mainContent = document.getElementById('main-content');
@@ -270,9 +281,11 @@
             `).join('');
         }
 
-        showHome();
-        updatePrices();
-        setInterval(updatePrices, 60000);
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeBackend();
+            updatePrices();
+            setInterval(updatePrices, 60000);
+        });
     </script>
 </body>
 </html>
