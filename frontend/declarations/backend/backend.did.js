@@ -3,8 +3,8 @@ export const idlFactory = ({ IDL }) => {
   const Post = IDL.Record({
     'id' : IDL.Nat,
     'title' : IDL.Text,
-    'body' : IDL.Text,
-    'author' : IDL.Text,
+    'content' : IDL.Text,
+    'date' : IDL.Text,
     'timestamp' : Time,
   });
   const Result = IDL.Variant({ 'ok' : Post, 'err' : IDL.Text });

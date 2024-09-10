@@ -5,8 +5,8 @@ import type { IDL } from '@dfinity/candid';
 export interface Post {
   'id' : bigint,
   'title' : string,
-  'body' : string,
-  'author' : string,
+  'content' : string,
+  'date' : string,
   'timestamp' : Time,
 }
 export type Result = { 'ok' : Post } |

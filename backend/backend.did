@@ -6,8 +6,8 @@ type Result =
  };
 type Post = 
  record {
-   author: text;
-   body: text;
+   content: text;
+   date: text;
    id: nat;
    timestamp: Time;
    title: text;

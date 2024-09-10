@@ -9,20 +9,20 @@ actor {
   type Post = {
     id: Nat;
     title: Text;
-    body: Text;
-    author: Text;
+    content: Text;
+    date: Text;
     timestamp: Time.Time;
   };
 
   stable var posts : [Post] = [];
   stable var nextId : Nat = 0;
 
-  public func createPost(title: Text, body: Text, author: Text) : async Result.Result<Post, Text> {
+  public func createPost(title: Text, content: Text, date: Text) : async Result.Result<Post, Text> {
     let post : Post = {
       id = nextId;
       title = title;
-      body = body;
-      author = author;
+      content = content;
+      date = date;
       timestamp = Time.now();
     };
     posts := Array.append(posts, [post]);
